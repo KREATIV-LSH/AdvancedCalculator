@@ -10,5 +10,21 @@ public class Setting {
 		this.PI = PI;
 		this.roundingDigits = rounding;
 	}
+	
+	public String getPI() {
+		return PI;
+	}
+	
+	public void setPI(String pI) {
+		PI = pI;
+	}
+	
+	public int getRoundingDigits() {
+		return roundingDigits;
+	}
+	
+	public void setRoundingDigits(int roundingDigits) {
+		this.roundingDigits = roundingDigits;
+	}
 
 }
