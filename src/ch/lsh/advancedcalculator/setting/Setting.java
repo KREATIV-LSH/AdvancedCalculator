@@ -27,4 +27,8 @@ public class Setting {
 		this.roundingDigits = roundingDigits;
 	}
 
+	@Override
+	public String toString() {
+		return "PI:" + PI + ",Rounding:" + roundingDigits;
+	}
 }
