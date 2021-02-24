@@ -7,10 +7,37 @@ import ch.lsh.advancedcalculator.util.FileUtils;
 public class SettingsLoader {
 	
 	private static Setting activeSetting = null;
-	private static String rootPath = System.getProperty("user.home") + "\\.advanced_calculator";
+	private static String rootPath = System.getProperty("user.home") + "\\.advanced_calculator\\setting";
 	
 	public static Setting getLoadedSetting() {
 		return activeSetting;
+	}
+	
+	public static int updateSetting(String settingName, Setting setting) {
+		if(checkRootPath()) {
+			if(FileUtils.exists(rootPath + "\\" + settingName + ".json")) {
+				if(setting != null) {
+					Gson gson = new Gson();
+					String json = gson.toJson(setting);
+					if(gson.fromJson(json, Setting.class) != null) {
+						FileUtils.removeFile(rootPath + "\\" + settingName + ".json");
+						FileUtils.saveFile(rootPath + "\\" + settingName + ".json", json);
+					} else {
+						return 3;
+					}
+				} else {
+					return 3;
+				}
+			} else {
+				return 1;
+			}
+		} else {
+			if(!createRootPath()) {
+				return 2;
+			}
+			updateSetting(settingName, setting);
+		}
+		return 0;
 	}
 	
 	public static int addSetting(String settingName, Setting setting) {
@@ -25,7 +52,7 @@ public class SettingsLoader {
 						return 3;
 					}
 				} else {
-					return 1;
+					return 3;
 				}
 			} else {
 				return 1;
@@ -71,12 +98,16 @@ public class SettingsLoader {
 		return FileUtils.exists(rootPath);
 	}
 	
+	public static boolean doesSettingExist(String settingName) {
+		return FileUtils.exists(rootPath + "\\" + settingName + ".json");
+	}
+	
 	private static boolean createRootPath() {
 		boolean temp = FileUtils.createFolder(rootPath);
 		return temp;
 	}
 	
-	private static void loadDefaultSetting() {
+	public static void loadDefaultSetting() {
 		Setting setting = new Setting("3.141592653589793238462643383279502", 6);
 		activeSetting = setting;
 	}
